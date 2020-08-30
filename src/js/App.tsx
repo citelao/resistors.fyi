@@ -29,7 +29,7 @@ export default class App extends React.Component {
                 <ol className="color_list">
                     {COLORS.map((c) => {
                         return <li key={c.label} className="color_button color_list__item">
-                            <label className="color_button__label" style={{ background: c.background, color: c.color }}>
+                            <label className="color_button__label block" style={{ background: c.background, color: c.color }}>
                                 <input type="radio" name="TODO" value={c.label} /> {c.label}
                             </label>
                         </li>;
