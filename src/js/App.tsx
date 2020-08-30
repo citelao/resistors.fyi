@@ -25,7 +25,7 @@ export default class App extends React.Component {
             <p>What's the first color on your resistor? The side you choose doesn't matter.</p>
             
             <fieldset>
-                <legend>Color</legend>
+                <legend className="p-6">Color</legend>
                 <ol className="color_list">
                     {COLORS.map((c) => {
                         return <li key={c.label} className="color_button color_list__item">
