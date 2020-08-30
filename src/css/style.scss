@@ -19,21 +19,3 @@ a {
 @tailwind components;
 
 @tailwind utilities;
-
-.color_list {
-    list-style: none;
-}
-
-    .color_list__item {
-        display: block;
-    }
-
-.color_button {
-    // appearance: none;
-    font-size: 2rem;
-}
-
-    .color_button__label {
-        // width: 100%;
-        padding: 1rem;
-    }

@@ -23,13 +23,13 @@ export default class App extends React.Component {
         return <>
             <h1>Reverse resistor calculator</h1>
             <p>What's the first color on your resistor? The side you choose doesn't matter.</p>
-            
+
             <fieldset>
                 <legend className="p-6">Color</legend>
-                <ol className="color_list">
+                <ol>
                     {COLORS.map((c) => {
-                        return <li key={c.label} className="color_button color_list__item">
-                            <label className="color_button__label block" style={{ background: c.background, color: c.color }}>
+                        return <li key={c.label} className="text-lg">
+                            <label className="block p-2 hover:bold hover:underline" style={{ backgroundColor: c.background, color: c.color }}>
                                 <input type="radio" name="TODO" value={c.label} /> {c.label}
                             </label>
                         </li>;
