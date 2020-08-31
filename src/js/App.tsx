@@ -1,6 +1,6 @@
 import React, { KeyboardEvent } from "react";
-import { calculate, ResistorColor } from "./resistor";
-import { repeat } from "./utils";
+import { calculate, ResistorColor, supportedColors } from "./resistor";
+import { from, repeat } from "./utils";
 
 type ResistorColorInfo = {
     label: ResistorColor,
@@ -23,6 +23,8 @@ const COLORS: ResistorColorInfo[] = [
     { label: "gold", background: "rgb(211, 172, 132)", color: "#000" },
     { label: "silver", background: "rgb(163, 157, 146)", color: "#000" },
 ];
+// TODO 6
+// const MAX_BANDS = 3;
 const MAX_BANDS = 5;
 
 const HOTKEYS = [
@@ -104,8 +106,11 @@ export default class App extends React.Component<IAppProps, IAppState> {
     }
 
     render() {
-        // TODO 6
-        // const MAX_BANDS = 3;
+        const supportedColorsArr = from(3, MAX_BANDS, (i) => {
+            return supportedColors(i);
+        });
+        console.log(supportedColorsArr);
+
         const form = repeat(MAX_BANDS, (i) => {
             const radio_name = `band${i}`;
             const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,17 +119,40 @@ export default class App extends React.Component<IAppProps, IAppState> {
             };
 
             const isIndexChosen = this.state.colors.length > i && this.state.colors[i] != null;
+            const indexSupportedColors = supportedColorsArr.reduce<ResistorColor[]>((acc, supportedColorsForBand) => {
+                const colorsForIndex = (supportedColorsForBand.length > i)
+                    ? supportedColorsForBand[i]
+                    : [];
+                return [...acc, ...colorsForIndex];
+            }, [])
+                .sort()
+                .filter((color, index, self) => {
+                    // Only keep the first one.
+                    return self.indexOf(color) === index;
+                });
 
             return <fieldset key={i}>
                 <legend className="p-6">Band #{i + 1}</legend>
                 <ol>
                     {COLORS.map((c, j) => {
+                        const isSupportedColor = indexSupportedColors.includes(c.label);
+                        // const isSupportedColor = false;
+
+
                         const hotkey = HOTKEYS[j];
                         const shouldShowHotkeys = (this.state.currentIndex === i);
-                        const isColor = (isIndexChosen && c.label === this.state.colors[i]);
+
+                        const isThisColorSelected = (isIndexChosen && c.label === this.state.colors[i]);
+
                         return <li key={c.label} className="text-lg">
-                            <label className={`block p-2 cursor-pointer hover:bold hover:underline ${(isIndexChosen && !isColor) ? "opacity-50 hover:opacity-100" : ""}`} style={{ backgroundColor: c.background, color: c.color }}>
-                                <input type="radio" onChange={handler} name={radio_name} value={c.label} />{" "}
+                            <label className={
+                                `block p-2 cursor-pointer hover:bold hover:underline ${(isIndexChosen && !isThisColorSelected) ? "opacity-50 hover:opacity-100" : ""} ${(isSupportedColor) ? "" : "opacity-25"}`}
+                                style={{ backgroundColor: c.background, color: c.color }}>
+                                <input type="radio"
+                                    onChange={handler}
+                                    name={radio_name}
+                                    value={c.label}
+                                    disabled={!isSupportedColor} />{" "}
                                 {c.label}
                                 {(shouldShowHotkeys)
                                     ? <kbd className="float-right border border-solid border-white p-1 py-0 font-mono rounded-sm">
