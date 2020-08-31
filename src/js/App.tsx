@@ -56,6 +56,25 @@ function isFullColors(cArray: Array<ResistorColor | null>): cArray is Array<Resi
     return !hasNull;
 }
 
+const SUPPORTED_COLORS_ARR = from(3, MAX_BANDS, (i) => {
+    return supportedColors(i);
+});
+function getSupportedColorsForIndex(index: number): ResistorColor[] {
+    const indexSupportedColors = SUPPORTED_COLORS_ARR.reduce<ResistorColor[]>((acc, supportedColorsForBand) => {
+        const colorsForIndex = (supportedColorsForBand.length > index)
+            ? supportedColorsForBand[index]
+            : [];
+        return [...acc, ...colorsForIndex];
+    }, [])
+        .sort()
+        .filter((color, index, self) => {
+            // Only keep the first one.
+            return self.indexOf(color) === index;
+        });
+
+    return indexSupportedColors;
+}
+
 export default class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
@@ -91,6 +110,12 @@ export default class App extends React.Component<IAppProps, IAppState> {
     }
 
     private handleColorSelect = (color: ResistorColor, band: number) => {
+        const supportedColors = getSupportedColorsForIndex(band);
+        if (!supportedColors.includes(color)) {
+            console.warn(`Color not supported for this band (${color}, ${band})`);
+            return;
+        }
+
         const nullsToGenerate = Math.max(0, (band - this.state.colors.length));
         const colors = [... this.state.colors, ... repeat(nullsToGenerate, () => null)];
         colors[band] = color;
@@ -106,11 +131,6 @@ export default class App extends React.Component<IAppProps, IAppState> {
     }
 
     render() {
-        const supportedColorsArr = from(3, MAX_BANDS, (i) => {
-            return supportedColors(i);
-        });
-        console.log(supportedColorsArr);
-
         const form = repeat(MAX_BANDS, (i) => {
             const radio_name = `band${i}`;
             const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,17 +139,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
             };
 
             const isIndexChosen = this.state.colors.length > i && this.state.colors[i] != null;
-            const indexSupportedColors = supportedColorsArr.reduce<ResistorColor[]>((acc, supportedColorsForBand) => {
-                const colorsForIndex = (supportedColorsForBand.length > i)
-                    ? supportedColorsForBand[i]
-                    : [];
-                return [...acc, ...colorsForIndex];
-            }, [])
-                .sort()
-                .filter((color, index, self) => {
-                    // Only keep the first one.
-                    return self.indexOf(color) === index;
-                });
+            const indexSupportedColors = getSupportedColorsForIndex(i);
 
             return <fieldset key={i}>
                 <legend className="p-6">Band #{i + 1}</legend>
@@ -137,7 +147,6 @@ export default class App extends React.Component<IAppProps, IAppState> {
                     {COLORS.map((c, j) => {
                         const isSupportedColor = indexSupportedColors.includes(c.label);
                         // const isSupportedColor = false;
-
 
                         const hotkey = HOTKEYS[j];
                         const shouldShowHotkeys = (this.state.currentIndex === i);
