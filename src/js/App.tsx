@@ -24,11 +24,27 @@ const COLORS: ResistorColorInfo[] = [
     { label: "silver", background: "rgb(163, 157, 146)", color: "#000" },
 ];
 
+const HOTKEYS = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "a",
+    "b",
+];
+
 interface IAppProps {
 }
 
 interface IAppState {
-    colors: Array<ResistorColor | null>
+    colors: Array<ResistorColor | null>,
+    currentIndex: number
 }
 
 function isFullColors(cArray: Array<ResistorColor | null>): cArray is Array<ResistorColor> {
@@ -43,6 +59,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
         this.state = {
             colors: [],
+            currentIndex: 0
         };
     }
 
@@ -68,11 +85,16 @@ export default class App extends React.Component<IAppProps, IAppState> {
             return <fieldset key={i}>
                 <legend className="p-6">Band #{i + 1}</legend>
                 <ol>
-                    {COLORS.map((c) => {
+                    {COLORS.map((c, i) => {
+                        const hotkey = HOTKEYS[i];
                         const isColor = (isIndexChosen && c.label === this.state.colors[i]);
                         return <li key={c.label} className="text-lg">
-                            <label className={`block p-2 hover:bold hover:underline ${(isIndexChosen && !isColor) ? "opacity-50 hover:opacity-100" : ""}`} style={{ backgroundColor: c.background, color: c.color }}>
-                                <input type="radio" onChange={handler} name={radio_name} value={c.label} /> {c.label}
+                            <label className={`block p-2 cursor-pointer hover:bold hover:underline ${(isIndexChosen && !isColor) ? "opacity-50 hover:opacity-100" : ""}`} style={{ backgroundColor: c.background, color: c.color }}>
+                                <input type="radio" onChange={handler} name={radio_name} value={c.label} />{" "}
+                                {c.label}
+                                <kbd className="float-right border border-solid border-white p-1 py-0 font-mono">
+                                    {hotkey}
+                                </kbd>
                             </label>
                         </li>;
                     })}
@@ -86,9 +108,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
             : null;
 
         return <>
-            <section className="w-1/2">
+            <section className="w-1/2 m-2">
                 <h1>Reverse resistor calculator</h1>
-                <p>What's the first color on your resistor? The side you choose doesn't matter.</p>
 
                 {form}
             </section>
