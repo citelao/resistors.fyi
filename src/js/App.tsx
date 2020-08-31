@@ -1,4 +1,4 @@
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { calculate, ResistorColor } from "./resistor";
 import { repeat } from "./utils";
 
@@ -23,6 +23,7 @@ const COLORS: ResistorColorInfo[] = [
     { label: "gold", background: "rgb(211, 172, 132)", color: "#000" },
     { label: "silver", background: "rgb(163, 157, 146)", color: "#000" },
 ];
+const MAX_BANDS = 5;
 
 const HOTKEYS = [
     "0",
@@ -63,27 +64,45 @@ export default class App extends React.Component<IAppProps, IAppState> {
         };
     }
 
+    componentDidMount() {
+        document.addEventListener("keydown", this.handleKeyDown, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyDown, false);
+    }
+
+    private handleKeyDown = (e: globalThis.KeyboardEvent): void => {
+        if (this.state.currentIndex >= MAX_BANDS) {
+            return;
+        }
+
+        this.handleColorSelect("red", this.state.currentIndex);
+    }
+
+    private handleColorSelect = (color: ResistorColor, band: number) => {
+        const nullsToGenerate = Math.max(0, (band - this.state.colors.length));
+        const colors = [... this.state.colors, ... repeat(nullsToGenerate, () => null)];
+        colors[band] = color;
+
+        const shouldIncrementIndex = (this.state.currentIndex === band);
+
+        this.setState({
+            colors: colors,
+            currentIndex: (shouldIncrementIndex)
+                ? this.state.currentIndex + 1
+                : this.state.currentIndex
+        });
+    }
+
     render() {
         // TODO 6
-        const MAX_BANDS = 5;
         // const MAX_BANDS = 3;
         const form = repeat(MAX_BANDS, (i) => {
             const radio_name = `band${i}`;
             const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
                 const val = e.target.value as ResistorColor;
-
-                const nullsToGenerate = Math.max(0, (i - this.state.colors.length));
-                const colors = [... this.state.colors, ... repeat(nullsToGenerate, () => null)];
-                colors[i] = val;
-
-                const shouldIncrementIndex = (this.state.currentIndex === i);
-
-                this.setState({
-                    colors: colors,
-                    currentIndex: (shouldIncrementIndex)
-                        ? this.state.currentIndex + 1
-                        : this.state.currentIndex
-                });
+                this.handleColorSelect(val, i);
             };
 
             const isIndexChosen = this.state.colors.length > i && this.state.colors[i] != null;
