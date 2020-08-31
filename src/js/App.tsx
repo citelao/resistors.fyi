@@ -86,17 +86,19 @@ export default class App extends React.Component<IAppProps, IAppState> {
             : null;
 
         return <>
-            <h1>Reverse resistor calculator</h1>
-            <p>What's the first color on your resistor? The side you choose doesn't matter.</p>
+            <section className="w-1/2">
+                <h1>Reverse resistor calculator</h1>
+                <p>What's the first color on your resistor? The side you choose doesn't matter.</p>
 
-            {form}
+                {form}
+            </section>
 
             <aside className="fixed top-0 right-0 m-2">
                 <h2>Current state</h2>
                 <ol>
                     {this.state.colors.map((c) => {
                         if (!c) {
-                            return <li>hi</li>;
+                            return <li>(unset)</li>;
                         }
                         const color = COLORS.find((info) => info.label === c) ||
                             { background: "none", color: "inherit" };
