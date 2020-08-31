@@ -1,5 +1,5 @@
 import React, { KeyboardEvent } from "react";
-import { calculate, ResistorColor, supportedColors } from "./resistor";
+import { calculate, IResistance, ResistorColor, supportedColors } from "./resistor";
 import { from, repeat } from "./utils";
 
 type ResistorColorInfo = {
@@ -28,7 +28,6 @@ const COLORS: ResistorColorInfo[] = [
 const MAX_BANDS = 5;
 
 const HOTKEYS = [
-    "0",
     "1",
     "2",
     "3",
@@ -38,6 +37,7 @@ const HOTKEYS = [
     "7",
     "8",
     "9",
+    "0",
     "a",
     "b",
 ];
@@ -176,9 +176,14 @@ export default class App extends React.Component<IAppProps, IAppState> {
         });
 
         const isReadyToCalculate = (this.state.colors.length >= 3 && isFullColors(this.state.colors));
-        const calculatedResistor = (isReadyToCalculate)
-            ? calculate(this.state.colors as ResistorColor[])
-            : null;
+        let calculatedResistor: IResistance | null;
+        try {
+            calculatedResistor = (isReadyToCalculate)
+                ? calculate(this.state.colors as ResistorColor[])
+                : null;
+        } catch(e) {
+            calculatedResistor = null;
+        }
 
         return <>
             <section className="w-1/2 m-2">
@@ -203,7 +208,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 {(calculatedResistor)
                     ? <>
                         {calculatedResistor.sigFigs}{" "}
-                        x {calculatedResistor.multiplier}{" "}
+                        x {calculatedResistor.multiplier}Ω{" "}
                         ({calculatedResistor.tolerance}%)
                     </>
                     : null}

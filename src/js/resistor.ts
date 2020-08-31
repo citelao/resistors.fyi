@@ -89,7 +89,7 @@ export function supportedColors(size: number): Array<Array<ResistorColor>> {
     throw new Error(`Invalid number ${size}`);
 }
 
-interface IResistance {
+export interface IResistance {
     sigFigs: number[]
     multiplier: ResistorMultiplier,
     tolerance: ResistorTolerance,
