@@ -1,5 +1,5 @@
 import React from "react";
-import { ResistorColor } from "./resistor";
+import { calculate, ResistorColor } from "./resistor";
 import { repeat } from "./utils";
 
 type ResistorColorInfo = {
@@ -29,6 +29,12 @@ interface IAppProps {
 
 interface IAppState {
     colors: Array<ResistorColor | null>
+}
+
+function isFullColors(cArray: Array<ResistorColor | null>): c is Array<ResistorColor> {
+    const hasNull = cArray.findIndex((c) => c === null) !== -1;
+
+    return !hasNull;
 }
 
 export default class App extends React.Component<IAppProps, IAppState> {
@@ -71,6 +77,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
             </fieldset>;
         });
 
+        const isReadyToCalculate = (this.state.colors.length >= 3 && isFullColors(this.state.colors));
+
         return <>
             <h1>Reverse resistor calculator</h1>
             <p>What's the first color on your resistor? The side you choose doesn't matter.</p>
@@ -89,6 +97,10 @@ export default class App extends React.Component<IAppProps, IAppState> {
                         return <li style={{ backgroundColor: color.background, color: color.color }}>{c}</li>;
                     })}
                 </ol>
+
+                {(isReadyToCalculate)
+                    ? <>{calculate(this.state.colors as ResistorColor[]).sigFigs}</>
+                    : null}
             </aside>
         </>;
     }
