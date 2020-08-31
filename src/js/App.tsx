@@ -63,12 +63,15 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 });
             };
 
+            const isIndexChosen = this.state.colors.length > i && this.state.colors[i] != null;
+
             return <fieldset key={i}>
                 <legend className="p-6">Band #{i + 1}</legend>
                 <ol>
                     {COLORS.map((c) => {
+                        const isColor = (isIndexChosen && c.label === this.state.colors[i]);
                         return <li key={c.label} className="text-lg">
-                            <label className="block p-2 hover:bold hover:underline" style={{ backgroundColor: c.background, color: c.color }}>
+                            <label className={`block p-2 hover:bold hover:underline ${(isIndexChosen && !isColor) ? "opacity-50 hover:opacity-100" : ""}`} style={{ backgroundColor: c.background, color: c.color }}>
                                 <input type="radio" onChange={handler} name={radio_name} value={c.label} /> {c.label}
                             </label>
                         </li>;
