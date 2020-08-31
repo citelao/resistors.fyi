@@ -20,7 +20,7 @@ interface IResistorColorInfo {
     multiplier: ResistorMultiplier;
     tolerance: ResistorTolerance | null;
 }
-const COLOR_MAP: Map<ResistorColor, IResistorColorInfo> = new Map([
+const RAW_COLOR_MAP = [
     [ "black",	{ sigFig: 0,	multiplier: "1",	tolerance: null } ],
     [ "brown",	{ sigFig: 1,	multiplier: "10",	tolerance: "1" } ],
     [ "red",	{ sigFig: 2,	multiplier: "100",	tolerance: "2" } ],
@@ -35,7 +35,59 @@ const COLOR_MAP: Map<ResistorColor, IResistorColorInfo> = new Map([
     [ "gold",	{ sigFig: null,	multiplier: "0.1",	tolerance: "5" } ],
     [ "silver",	{ sigFig: null,	multiplier: "0.01",	tolerance: "10" } ],
     // "none"
-]);
+];
+const COLOR_MAP: Map<ResistorColor, IResistorColorInfo> = new Map(RAW_COLOR_MAP);
+
+function getMatchingColors(fn: (color: ResistorColor, info: IResistorColorInfo) => boolean): ResistorColor[] {
+    const colors: ResistorColor[] = RAW_COLOR_MAP.filter((arr) => {
+        return fn(arr[0] as any, arr[1] as any);
+    }).map((arr) => {
+        return arr[0] as ResistorColor;
+    });
+
+    return colors;
+}
+
+export function supportedColors(size: number): Array<Array<ResistorColor>> {
+    const sigFigColors = getMatchingColors((color, info) => {
+        return info.sigFig !== null;
+    });
+    const multiplierColors = getMatchingColors((color, info) => {
+        // Yes it's all of them.
+        return info.multiplier !== null;
+    });
+    const toleranceColors = getMatchingColors((color, info) => {
+        return info.tolerance !== null;
+    });
+
+    switch(size) {
+    case 3:
+        return [
+            sigFigColors,
+            sigFigColors,
+            multiplierColors
+        ];
+    case 4:
+        return [
+            sigFigColors,
+            sigFigColors,
+            multiplierColors,
+            toleranceColors
+        ];
+    case 5:
+        return [
+            sigFigColors,
+            sigFigColors,
+            sigFigColors,
+            multiplierColors,
+            toleranceColors
+        ];
+    case 6:
+        throw new Error("Not implemented");
+    }
+
+    throw new Error(`Invalid number ${size}`);
+}
 
 interface IResistance {
     sigFigs: number[]
