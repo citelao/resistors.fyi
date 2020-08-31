@@ -73,6 +73,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
     }
 
     private handleKeyDown = (e: globalThis.KeyboardEvent): void => {
+        const wasHotkey = HOTKEYS.findIndex((h) => h === e.key) !== -1;
+        console.log(wasHotkey, e.key);
+
         if (this.state.currentIndex >= MAX_BANDS) {
             return;
         }
