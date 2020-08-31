@@ -31,7 +31,7 @@ interface IAppState {
     colors: Array<ResistorColor | null>
 }
 
-function isFullColors(cArray: Array<ResistorColor | null>): c is Array<ResistorColor> {
+function isFullColors(cArray: Array<ResistorColor | null>): cArray is Array<ResistorColor> {
     const hasNull = cArray.findIndex((c) => c === null) !== -1;
 
     return !hasNull;
@@ -78,6 +78,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
         });
 
         const isReadyToCalculate = (this.state.colors.length >= 3 && isFullColors(this.state.colors));
+        const calculatedResistor = (isReadyToCalculate)
+            ? calculate(this.state.colors as ResistorColor[])
+            : null;
 
         return <>
             <h1>Reverse resistor calculator</h1>
@@ -98,8 +101,12 @@ export default class App extends React.Component<IAppProps, IAppState> {
                     })}
                 </ol>
 
-                {(isReadyToCalculate)
-                    ? <>{calculate(this.state.colors as ResistorColor[]).sigFigs}</>
+                {(calculatedResistor)
+                    ? <>
+                        {calculatedResistor.sigFigs}{" "}
+                        x {calculatedResistor.multiplier}{" "}
+                        ({calculatedResistor.tolerance}%)
+                    </>
                     : null}
             </aside>
         </>;
