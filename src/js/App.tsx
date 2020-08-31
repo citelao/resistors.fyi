@@ -73,14 +73,19 @@ export default class App extends React.Component<IAppProps, IAppState> {
     }
 
     private handleKeyDown = (e: globalThis.KeyboardEvent): void => {
-        const wasHotkey = HOTKEYS.findIndex((h) => h === e.key) !== -1;
-        console.log(wasHotkey, e.key);
+        const hotkeyIndex = HOTKEYS.findIndex((h) => h === e.key);
+        const wasHotkey = hotkeyIndex !== -1;
+        if (!wasHotkey) {
+            return;
+        }
 
         if (this.state.currentIndex >= MAX_BANDS) {
             return;
         }
 
-        this.handleColorSelect("red", this.state.currentIndex);
+        const matchedColor = COLORS[hotkeyIndex];
+
+        this.handleColorSelect(matchedColor.label, this.state.currentIndex);
     }
 
     private handleColorSelect = (color: ResistorColor, band: number) => {
