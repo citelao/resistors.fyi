@@ -75,8 +75,14 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 const nullsToGenerate = Math.max(0, (i - this.state.colors.length));
                 const colors = [... this.state.colors, ... repeat(nullsToGenerate, () => null)];
                 colors[i] = val;
+
+                const shouldIncrementIndex = (this.state.currentIndex === i);
+
                 this.setState({
-                    colors: colors
+                    colors: colors,
+                    currentIndex: (shouldIncrementIndex)
+                        ? this.state.currentIndex + 1
+                        : this.state.currentIndex
                 });
             };
 
@@ -85,16 +91,19 @@ export default class App extends React.Component<IAppProps, IAppState> {
             return <fieldset key={i}>
                 <legend className="p-6">Band #{i + 1}</legend>
                 <ol>
-                    {COLORS.map((c, i) => {
-                        const hotkey = HOTKEYS[i];
+                    {COLORS.map((c, j) => {
+                        const hotkey = HOTKEYS[j];
+                        const shouldShowHotkeys = (this.state.currentIndex === i);
                         const isColor = (isIndexChosen && c.label === this.state.colors[i]);
                         return <li key={c.label} className="text-lg">
                             <label className={`block p-2 cursor-pointer hover:bold hover:underline ${(isIndexChosen && !isColor) ? "opacity-50 hover:opacity-100" : ""}`} style={{ backgroundColor: c.background, color: c.color }}>
                                 <input type="radio" onChange={handler} name={radio_name} value={c.label} />{" "}
                                 {c.label}
-                                <kbd className="float-right border border-solid border-white p-1 py-0 font-mono">
-                                    {hotkey}
-                                </kbd>
+                                {(shouldShowHotkeys)
+                                    ? <kbd className="float-right border border-solid border-white p-1 py-0 font-mono">
+                                        {hotkey}
+                                    </kbd>
+                                    : null}
                             </label>
                         </li>;
                     })}
