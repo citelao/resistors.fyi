@@ -100,7 +100,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                                 <input type="radio" onChange={handler} name={radio_name} value={c.label} />{" "}
                                 {c.label}
                                 {(shouldShowHotkeys)
-                                    ? <kbd className="float-right border border-solid border-white p-1 py-0 font-mono">
+                                    ? <kbd className="float-right border border-solid border-white p-1 py-0 font-mono rounded-sm">
                                         {hotkey}
                                     </kbd>
                                     : null}
