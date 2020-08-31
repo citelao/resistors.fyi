@@ -48,8 +48,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
     render() {
         // TODO 6
-        // const MAX_BANDS = 6;
-        const MAX_BANDS = 3;
+        const MAX_BANDS = 5;
+        // const MAX_BANDS = 3;
         const form = repeat(MAX_BANDS, (i) => {
             const radio_name = `band${i}`;
             const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
