@@ -185,6 +185,15 @@ export default class App extends React.Component<IAppProps, IAppState> {
             calculatedResistor = null;
         }
 
+        let invertedResistor: IResistance | null;
+        try {
+            invertedResistor = (isReadyToCalculate)
+                ? calculate(this.state.colors.reverse() as ResistorColor[])
+                : null;
+        } catch(e) {
+            invertedResistor = null;
+        }
+
         return <>
             <section className="w-1/2 m-2">
                 <h1>Reverse resistor calculator</h1>
@@ -206,11 +215,20 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 </ol>
 
                 {(calculatedResistor)
-                    ? <>
+                    ? <p>
                         {calculatedResistor.sigFigs}{" "}
                         x {calculatedResistor.multiplier}Ω{" "}
                         ({calculatedResistor.tolerance}%)
-                    </>
+                    </p>
+                    : null}
+
+                {(invertedResistor)
+                    ? <small>or{" "}
+                        {invertedResistor.sigFigs}{" "}
+                        x {invertedResistor.multiplier}Ω{" "}
+                        ({invertedResistor.tolerance}%){" "}
+                        if backwards
+                    </small>
                     : null}
             </aside>
         </>;
