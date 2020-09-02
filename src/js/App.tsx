@@ -189,7 +189,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
         let invertedResistor: IResistance | null;
         try {
             invertedResistor = (isReadyToCalculate)
-                ? calculate(this.state.colors.reverse() as ResistorColor[])
+                ? calculate([... this.state.colors].reverse() as ResistorColor[])
                 : null;
         } catch(e) {
             invertedResistor = null;
@@ -204,6 +204,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
             <aside className="fixed top-0 right-0 m-2">
                 <h2>Current state</h2>
+
                 <ResistorSvg colors={this.state.colors} />
 
                 <ol>
@@ -231,6 +232,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
                         x {invertedResistor.multiplier}Ω{" "}
                         ({invertedResistor.tolerance}%){" "}
                         if backwards
+
+                        <ResistorSvg colors={[... this.state.colors].reverse()} />
                     </small>
                     : null}
             </aside>
