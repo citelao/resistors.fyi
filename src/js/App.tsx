@@ -205,7 +205,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
             <aside className="fixed top-0 right-0 m-2">
                 <h2>Current state</h2>
 
-                <ResistorSvg colors={this.state.colors} />
+                <ResistorSvg colors={this.state.colors}
+                    length={80}
+                    className="m-auto"/>
 
                 <ol>
                     {this.state.colors.map((c) => {
@@ -233,7 +235,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                         ({invertedResistor.tolerance}%){" "}
                         if backwards
 
-                        <ResistorSvg colors={[... this.state.colors].reverse()} />
+                        <ResistorSvg colors={[... this.state.colors].reverse()} rotate={90} />
                     </small>
                     : null}
             </aside>
