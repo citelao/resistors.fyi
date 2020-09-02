@@ -1,6 +1,8 @@
 import React from "react";
+import { ResistorColor } from "./resistor";
 
 interface IResistorSvgProps {
+    colors: Array<ResistorColor | null>;
 }
 
 interface IResistorSvgState {
@@ -104,26 +106,31 @@ export default class ResistorSvg extends React.Component<IResistorSvgProps, IRes
                 L3.93 15.19
                 L3.3 14.17Z" id="resistor base"/>
 
-            <rect x="0" y="7"
-                width="32" height="8"
-                fill="red" />
-            
-            <rect x="0" y="17"
-                width="32" height="8"
-                fill="blue" />
-            
-            <rect x="0" y="27"
-                width="32" height="8"
-                fill="green" />
+            {this.props.colors.map((color, i) => {
+                if (!color) {
+                    color = "white";
+                }
 
-            {/* top */}
-            {/* <rect x="0" y="0"
-                width="30" height="10"
-                rx="4" ry="4" /> */}
+                const Y_OFFSET = 7;
+                const HEIGHT = 8;
+                const SPACING = 2;
 
-            {/* bottom */}
-            {/* <rect x="0" y="40"
-                width="30" height="10" /> */}
+                // 5th and 6th always have an offset. 4th only has an offset if
+                // there are only 4.
+                const isLast = this.props.colors.length - 1 === i;
+                const isOffset = (isLast)
+                    ? (i >= 3)
+                    : (i >= 4);
+
+                const baseY = Y_OFFSET + ((HEIGHT + SPACING) * i);
+                const y = (isOffset)
+                    ? baseY + 10
+                    : baseY;
+
+                return <rect x="0" y={y}
+                    width="32" height={HEIGHT}
+                    fill={color} key={i} />;
+            })}
         </svg>;
     }
 }
