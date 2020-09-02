@@ -31,7 +31,7 @@ export default class ResistorSvg extends React.Component<IResistorSvgProps, IRes
             height={height}
             className={this.props.className}>
             <g transform={`rotate(${this.props.rotate || 0})`}>
-                <path d="M3.3 14.17
+                <path id="resistor_base" d="M3.3 14.17
                     L2.77 13.2
                     L2.35 12.28
                     L2.04 11.41
@@ -122,7 +122,16 @@ export default class ResistorSvg extends React.Component<IResistorSvgProps, IRes
                     L4.67 16.25
                     L3.93 15.19
                     L3.93 15.19
-                    L3.3 14.17Z" id="resistor base"/>
+                    L3.3 14.17Z" />
+
+
+                <mask id="resistor_mask">
+                    <rect x="0" y="0"
+                        width="100%" height="100%"
+                        color="black" />
+
+                    <use xlinkHref="#resistor_base" fill="white" />
+                </mask>
 
                 {this.props.colors.map((color, i) => {
                     if (!color) {
@@ -130,7 +139,7 @@ export default class ResistorSvg extends React.Component<IResistorSvgProps, IRes
                     }
 
                     const Y_OFFSET = 7;
-                    const HEIGHT = 8;
+                    const HEIGHT = 7;
                     const SPACING = 2;
 
                     // 5th and 6th always have an offset. 4th only has an offset if
@@ -138,7 +147,7 @@ export default class ResistorSvg extends React.Component<IResistorSvgProps, IRes
                     const isLast = this.props.colors.length - 1 === i;
                     const isOffset = (isLast)
                         ? (i >= 3)
-                        : (i >= 4);
+                        : (i === 4);
 
                     const baseY = Y_OFFSET + ((HEIGHT + SPACING) * i);
                     const y = (isOffset)
@@ -147,7 +156,8 @@ export default class ResistorSvg extends React.Component<IResistorSvgProps, IRes
 
                     return <rect x="0" y={y}
                         width="32" height={HEIGHT}
-                        fill={color} key={i} />;
+                        fill={color} key={i} 
+                        mask="url(#resistor_mask)" />;
                 })}
             </g>
         </svg>;
