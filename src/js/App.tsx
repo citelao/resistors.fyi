@@ -76,6 +76,11 @@ function getSupportedColorsForIndex(index: number): ResistorColor[] {
     return indexSupportedColors;
 }
 
+function resistanceToString(resistance: IResistance): string {
+    const numberString = `${resistance.sigFigs.shift()}.${resistance.sigFigs.join("")}`;
+    return `${numberString}×${resistance.multiplier}Ω (±${resistance.tolerance}%)`
+}
+
 export default class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
@@ -222,17 +227,13 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
                 {(calculatedResistor)
                     ? <p>
-                        {calculatedResistor.sigFigs}{" "}
-                        x {calculatedResistor.multiplier}Ω{" "}
-                        ({calculatedResistor.tolerance}%)
+                        {resistanceToString(calculatedResistor)}
                     </p>
                     : null}
 
                 {(invertedResistor)
                     ? <small>or{" "}
-                        {invertedResistor.sigFigs}{" "}
-                        x {invertedResistor.multiplier}Ω{" "}
-                        ({invertedResistor.tolerance}%){" "}
+                        {resistanceToString(invertedResistor)}{" "}
                         if backwards
 
                         <ResistorSvg colors={[... this.state.colors].reverse()} 
