@@ -210,7 +210,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 </div>
             </section>
 
-            <aside className="fixed top-0 right-0 m-2">
+            <aside className="fixed top-0 right-0 m-2 w-1/2">
                 <h2>Current state</h2>
 
                 <ResistorSvg colors={this.state.colors}
