@@ -147,6 +147,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
             const isIndexChosen = this.state.colors.length > i && this.state.colors[i] != null;
             const indexSupportedColors = getSupportedColorsForIndex(i);
 
+            // className={(isIndexChosen) ? " " : ""}
             return <fieldset key={i}>
                 <legend className="p-6">Band #{i + 1}</legend>
                 <ol>
@@ -204,7 +205,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
             <section className="w-1/2 m-2">
                 <h1>Reverse resistor calculator</h1>
 
-                {form}
+                <div className="flex flex-wrap">
+                    {form}
+                </div>
             </section>
 
             <aside className="fixed top-0 right-0 m-2">
