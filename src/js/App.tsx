@@ -115,9 +115,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
         this.handleColorSelect(matchedColor.label, this.state.currentIndex);
     }
 
-    private handleColorSelect = (color: ResistorColor, band: number) => {
+    private handleColorSelect = (color: ResistorColor | null, band: number) => {
         const supportedColors = getSupportedColorsForIndex(band);
-        if (!supportedColors.includes(color)) {
+        if (color && !supportedColors.includes(color)) {
             console.warn(`Color not supported for this band (${color}, ${band})`);
             return;
         }
@@ -139,17 +139,20 @@ export default class App extends React.Component<IAppProps, IAppState> {
     render() {
         const form = repeat(MAX_BANDS, (i) => {
             const radio_name = `band${i}`;
-            const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const selectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
                 const val = e.target.value as ResistorColor;
                 this.handleColorSelect(val, i);
+            };
+            const unselectHandler = () => {
+                this.handleColorSelect(null, i);
             };
 
             const isIndexChosen = this.state.colors.length > i && this.state.colors[i] != null;
             const indexSupportedColors = getSupportedColorsForIndex(i);
 
             // className={(isIndexChosen) ? " " : ""}
-            return <fieldset key={i}>
-                <legend className="p-6">Band #{i + 1}</legend>
+            return <fieldset key={i} className="mx-1">
+                <legend className="py-6">Band #{i + 1}</legend>
                 <ol>
                     {COLORS.map((c, j) => {
                         const isSupportedColor = indexSupportedColors.includes(c.label);
@@ -165,13 +168,20 @@ export default class App extends React.Component<IAppProps, IAppState> {
                                 `block p-2 cursor-pointer hover:bold hover:underline ${(isIndexChosen && !isThisColorSelected) ? "opacity-50 hover:opacity-100" : ""} ${(isSupportedColor) ? "" : "opacity-25"}`}
                                 style={{ backgroundColor: c.background, color: c.color }}>
                                 <input type="radio"
-                                    onChange={handler}
+                                    onChange={selectHandler}
                                     name={radio_name}
                                     value={c.label}
+                                    checked={isThisColorSelected}
+                                    onClick={() => {
+                                        if (isThisColorSelected) {
+                                            console.log("foo")
+                                            unselectHandler();
+                                        }
+                                    }}
                                     disabled={!isSupportedColor} />{" "}
                                 {c.label}
                                 {(shouldShowHotkeys)
-                                    ? <kbd className="float-right border border-solid border-white p-1 py-0 font-mono rounded-sm">
+                                    ? <kbd className="float-right border border-solid border-white px-1 mx-1 font-mono rounded-sm">
                                         {hotkey}
                                     </kbd>
                                     : null}

@@ -137,7 +137,8 @@ export default class ResistorSvg extends React.Component<IResistorSvgProps, IRes
 
                 {this.props.colors.map((color, i) => {
                     if (!color) {
-                        color = "white";
+                        // color = "white";
+                        return;
                     }
 
                     const Y_OFFSET = 7;
