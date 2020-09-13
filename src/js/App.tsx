@@ -1,4 +1,5 @@
 import React, { KeyboardEvent } from "react";
+import Hotkey from "./Hotkey";
 import { calculate, IResistance, ResistorColor, supportedColors } from "./resistor";
 import ResistorSvg from "./ResistorSvg";
 import { from, repeat } from "./utils";
@@ -48,6 +49,7 @@ interface IAppProps {
 
 interface IAppState {
     colors: Array<ResistorColor | null>,
+    history: Array<Array<ResistorColor | null>>,
     currentIndex: number
 }
 
@@ -87,6 +89,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
         this.state = {
             colors: [],
+            history: [],
             currentIndex: 0
         };
     }
@@ -100,6 +103,20 @@ export default class App extends React.Component<IAppProps, IAppState> {
     }
 
     private handleKeyDown = (e: globalThis.KeyboardEvent): void => {
+        // console.log(e.key);
+        
+        if (e.key === "Enter") {
+            // Handle the "new" key command
+            return;
+        } else if (e.key === "r") {
+            console.log(`Clearing [${this.state.colors.join(", ")}]`);
+            this.setState({
+                colors: [],
+                currentIndex: 0,
+            })
+            return;
+        }
+
         const hotkeyIndex = HOTKEYS.findIndex((h) => h === e.key);
         const wasHotkey = hotkeyIndex !== -1;
         if (!wasHotkey) {
@@ -183,9 +200,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
                                     ? <del>{c.label}</del>
                                     : c.label}
                                 {(shouldShowHotkeys)
-                                    ? <kbd className="float-right border border-solid border-white px-1 mx-1 font-mono rounded-sm">
+                                    ? <Hotkey borderColor="light" className="float-right">
                                         {hotkey}
-                                    </kbd>
+                                    </Hotkey>
                                     : null}
                             </label>
                         </li>;
@@ -214,7 +231,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
         }
 
         return <>
-            <section className="w-1/2 m-2">
+            <section className="w-2/3 m-2">
                 <h1>Reverse resistor calculator</h1>
 
                 <div className="flex flex-wrap">
@@ -222,8 +239,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 </div>
             </section>
 
-            <aside className="fixed top-0 right-0 m-2 w-1/2">
-                <h2>Current state</h2>
+            <aside className="fixed top-0 right-0 m-2 w-1/3">
+                <h2 className="text-center">Current state</h2>
 
                 <ResistorSvg colors={this.state.colors}
                     length={150}
@@ -256,6 +273,11 @@ export default class App extends React.Component<IAppProps, IAppState> {
                             className="m-auto" />
                     </small>
                     : null}
+
+                <ul className="m-auto">
+                    <li><Hotkey>r</Hotkey> restart</li>
+                    <li><Hotkey>enter</Hotkey> store &amp; create new</li>
+                </ul>
             </aside>
         </>;
     }
