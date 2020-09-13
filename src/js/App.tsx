@@ -180,7 +180,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                                     }}
                                     disabled={!isSupportedColor} />{" "}
                                 {(!isSupportedColor) 
-                                    ? <del>c.label</del>
+                                    ? <del>{c.label}</del>
                                     : c.label}
                                 {(shouldShowHotkeys)
                                     ? <kbd className="float-right border border-solid border-white px-1 mx-1 font-mono rounded-sm">
