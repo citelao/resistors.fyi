@@ -141,11 +141,18 @@ export default class App extends React.Component<IAppProps, IAppState> {
         if (e.key === "Enter") {
             // Handle the "new" key command
             // Check if we have any valid resistors:
-            // getPotentialResistors
-            // this.setState({
-            //     colors: [],
-            //     currentIndex: 0,
-            // });
+            const potentialResistors = getPotentialResistors(this.state.colors);
+            const hasPotentialResistors = !!(potentialResistors.normal || potentialResistors.reversed);
+            if (hasPotentialResistors) {
+                console.log(`Saving [${this.state.colors.join(", ")}]`);
+                this.setState({
+                    colors: [],
+                    currentIndex: 0,
+                    history: [... this.state.history, this.state.colors]
+                });
+            } else {
+                console.warn(`Can't save resistor, invalid: [${this.state.colors.join(", ")}]`);
+            }
             return;
         } else if (e.key === "r") {
             console.log(`Clearing [${this.state.colors.join(", ")}]`);
@@ -302,6 +309,31 @@ export default class App extends React.Component<IAppProps, IAppState> {
                     <li><Hotkey>r</Hotkey> restart</li>
                     <li><Hotkey>enter</Hotkey> store &amp; create new</li>
                 </ul>
+
+                <h3 className="text-center my-2">History</h3>
+                <ol className="list-decimal">
+                    {this.state.history.map((h, i) => {
+                        const potentialResistors = getPotentialResistors(h);
+                        const calculatedResistor = potentialResistors.normal;
+                        const invertedResistor = potentialResistors.reversed;
+
+                        return <li key={i} className="grid grid-cols-2 even:bg-gray-200 p-1">
+                            {(calculatedResistor)
+                                ? <>
+                                    <ResistorSvg colors={h} length={30} />
+                                    <p>{resistanceToString(calculatedResistor)}</p>
+                                </>
+                                : null}
+
+                            {(invertedResistor)
+                                ? <>
+                                    <ResistorSvg colors={[...h].reverse()} length={20} />
+                                    <p className="text-sm">{resistanceToString(invertedResistor)}</p>
+                                </>
+                                : null}
+                        </li>;
+                    })}
+                </ol>
             </aside>
         </>;
     }
