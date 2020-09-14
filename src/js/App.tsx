@@ -311,6 +311,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 </ul>
 
                 <h3 className="text-center my-2">History</h3>
+                {(this.state.history.length === 0)
+                    ? <p className="text-center text-gray-600">(enter a resistor to save history)</p>
+                    : null}
                 <ol className="list-decimal">
                     {this.state.history.map((h, i) => {
                         const potentialResistors = getPotentialResistors(h);
