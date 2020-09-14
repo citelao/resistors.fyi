@@ -59,6 +59,39 @@ function isFullColors(cArray: Array<ResistorColor | null>): cArray is Array<Resi
     return !hasNull;
 }
 
+interface IPotentialResistors {
+    normal: IResistance | null;
+    reversed: IResistance | null;
+}
+function getPotentialResistors(colors: Array<ResistorColor | null>): IPotentialResistors {
+    const isReadyToCalculate = (colors.length >= 3 && isFullColors(colors));
+    if (!isReadyToCalculate) {
+        return {
+            normal: null,
+            reversed: null
+        };
+    }
+
+    let potentialNormal: IResistance | null = null;
+    try {
+        potentialNormal = calculate(colors as ResistorColor[]);
+    } catch(e) {
+        // Ignore errors, since not all resistors are valid.
+    }
+
+    let potentialReversed: IResistance | null = null;
+    try {
+        potentialReversed = calculate([... colors].reverse() as ResistorColor[]);
+    } catch(e) {
+        // Ignore errors, since not all resistors are valid.
+    }
+
+    return {
+        normal: potentialNormal,
+        reversed: potentialReversed
+    };
+}
+
 const SUPPORTED_COLORS_ARR = from(3, MAX_BANDS, (i) => {
     return supportedColors(i);
 });
@@ -107,13 +140,19 @@ export default class App extends React.Component<IAppProps, IAppState> {
         
         if (e.key === "Enter") {
             // Handle the "new" key command
+            // Check if we have any valid resistors:
+            // getPotentialResistors
+            // this.setState({
+            //     colors: [],
+            //     currentIndex: 0,
+            // });
             return;
         } else if (e.key === "r") {
             console.log(`Clearing [${this.state.colors.join(", ")}]`);
             this.setState({
                 colors: [],
                 currentIndex: 0,
-            })
+            });
             return;
         }
 
@@ -211,24 +250,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
             </fieldset>;
         });
 
-        const isReadyToCalculate = (this.state.colors.length >= 3 && isFullColors(this.state.colors));
-        let calculatedResistor: IResistance | null;
-        try {
-            calculatedResistor = (isReadyToCalculate)
-                ? calculate(this.state.colors as ResistorColor[])
-                : null;
-        } catch(e) {
-            calculatedResistor = null;
-        }
-
-        let invertedResistor: IResistance | null;
-        try {
-            invertedResistor = (isReadyToCalculate)
-                ? calculate([... this.state.colors].reverse() as ResistorColor[])
-                : null;
-        } catch(e) {
-            invertedResistor = null;
-        }
+        const potentialResistors = getPotentialResistors(this.state.colors);
+        const calculatedResistor = potentialResistors.normal;
+        const invertedResistor = potentialResistors.reversed;
 
         return <>
             <section className="w-2/3 m-2">
