@@ -317,10 +317,25 @@ export default class App extends React.Component<IAppProps, IAppState> {
                         const calculatedResistor = potentialResistors.normal;
                         const invertedResistor = potentialResistors.reversed;
 
-                        return <li key={i} className="grid grid-cols-2 even:bg-gray-200 p-1">
+                        return <li key={i} className="grid grid-cols-3 even:bg-gray-200 p-1">
                             {(calculatedResistor)
                                 ? <>
                                     <ResistorSvg colors={h} length={30} />
+
+                                    {/* Colors laid out */}
+                                    <div className="flex">
+                                        {h.map((c, j) => {
+                                            const color = COLORS.find((info) => info.label === c) ||
+                                                { background: "none", color: "inherit" };
+                                            return <div
+                                                key={j}
+                                                className="w-4 h-4"
+                                                title={c || undefined}
+                                                style={{ backgroundColor: color.background, color: color.color }}>
+                                                    {/* foo */}
+                                            </div>;
+                                        })}
+                                    </div>
                                     <p>{resistanceToString(calculatedResistor)}</p>
                                 </>
                                 : null}
@@ -328,6 +343,22 @@ export default class App extends React.Component<IAppProps, IAppState> {
                             {(invertedResistor)
                                 ? <>
                                     <ResistorSvg colors={[...h].reverse()} length={20} />
+
+                                    {/* Colors laid out */}
+                                    <div className="flex">
+                                        {[...h].reverse().map((c, j) => {
+                                            const color = COLORS.find((info) => info.label === c) ||
+                                                { background: "none", color: "inherit" };
+                                            return <div
+                                                key={j}
+                                                className="w-4 h-2"
+                                                title={c || undefined}
+                                                style={{ backgroundColor: color.background, color: color.color }}>
+                                                    {/* foo */}
+                                            </div>;
+                                        })}
+                                    </div>
+
                                     <p className="text-sm">{resistanceToString(invertedResistor)}</p>
                                 </>
                                 : null}
