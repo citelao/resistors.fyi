@@ -2,29 +2,9 @@ import React, { KeyboardEvent } from "react";
 import Hotkey from "./Hotkey";
 import { calculate, IResistance, ResistorColor, supportedColors } from "./resistor";
 import ResistorSvg from "./ResistorSvg";
+import { Colors } from "./resistor_colors";
 import { from, repeat } from "./utils";
 
-type ResistorColorInfo = {
-    label: ResistorColor,
-    background: string;
-    color: string;
-};
-const COLORS: ResistorColorInfo[] = [
-    { label: "black", background: "#000", color: "#fff" },
-    { label: "brown", background: "#524526", color: "#fff" },
-    { label: "red", background: "#ba062d", color: "#fff" },
-    { label: "orange", background: "rgb(231, 73, 22)", color: "#fff" },
-    { label: "yellow", background: "rgb(246, 193, 10)", color: "#000" },
-    { label: "green", background: "rgb(23, 100, 64)", color: "#fff" },
-    { label: "blue", background: "rgb(73, 63, 159)", color: "#fff" },
-    { label: "violet", background: "rgb(165, 85, 143)", color: "#000" },
-    { label: "grey", background: "#777", color: "#fff" },
-    { label: "white", background: "#fff", color: "#000" },
-    
-    // TODO: prettify
-    { label: "gold", background: "rgb(211, 172, 132)", color: "#000" },
-    { label: "silver", background: "rgb(163, 157, 146)", color: "#000" },
-];
 // TODO 6
 // const MAX_BANDS = 3;
 const MAX_BANDS = 5;
@@ -191,7 +171,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
             return;
         }
 
-        const matchedColor = COLORS[hotkeyIndex];
+        const matchedColor = Colors[hotkeyIndex];
 
         this.handleColorSelect(matchedColor.label, this.state.currentIndex);
     }
@@ -235,7 +215,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
             return <fieldset key={i} className="mx-1">
                 <legend className="py-6">Band #{i + 1}</legend>
                 <ol>
-                    {COLORS.map((c, j) => {
+                    {Colors.map((c, j) => {
                         const isSupportedColor = indexSupportedColors.includes(c.label);
                         // const isSupportedColor = false;
 
@@ -301,7 +281,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                             if (!c) {
                                 return <li>(unset)</li>;
                             }
-                            const color = COLORS.find((info) => info.label === c) ||
+                            const color = Colors.find((info) => info.label === c) ||
                                 { background: "none", color: "inherit" };
                             return <li style={{ backgroundColor: color.background, color: color.color }}>{c}</li>;
                         })}
@@ -347,7 +327,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                                         {/* Colors laid out */}
                                         <div className="flex">
                                             {h.map((c, j) => {
-                                                const color = COLORS.find((info) => info.label === c) ||
+                                                const color = Colors.find((info) => info.label === c) ||
                                                     { background: "none", color: "inherit" };
                                                 return <div
                                                     key={j}
@@ -369,7 +349,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                                         {/* Colors laid out */}
                                         <div className="flex">
                                             {[...h].reverse().map((c, j) => {
-                                                const color = COLORS.find((info) => info.label === c) ||
+                                                const color = Colors.find((info) => info.label === c) ||
                                                     { background: "none", color: "inherit" };
                                                 return <div
                                                     key={j}

@@ -1,5 +1,6 @@
 import React from "react";
 import { ResistorColor } from "./resistor";
+import { Colors } from "./resistor_colors";
 
 interface IResistorSvgProps {
     colors: Array<ResistorColor | null>;
@@ -157,9 +158,12 @@ export default class ResistorSvg extends React.Component<IResistorSvgProps, IRes
                         ? baseY + 10
                         : baseY;
 
+                    const mappedColor = Colors.find((info) => info.label === color) ||
+                        { background: null, color: null };
+
                     return <rect x="0" y={y}
                         width="32" height={HEIGHT}
-                        fill={color} key={i} 
+                        fill={mappedColor.background || undefined} key={i} 
                         mask="url(#resistor_mask)" />;
                 })}
             </g>
