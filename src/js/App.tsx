@@ -246,7 +246,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
                         return <li key={c.label} className="text-lg">
                             <label className={
-                                `block p-2 ${(isSupportedColor) ? "cursor-pointer hover:bold hover:underline" : ""} ${(isIndexChosen && !isThisColorSelected) ? "opacity-50 hover:opacity-100" : ""} ${(isSupportedColor) ? "" : "opacity-25"}`}
+                                `block p-2 ${(isSupportedColor) ? "cursor-pointer hover:bold hover:underline transform hover:scale-110" : ""} ${(isIndexChosen && !isThisColorSelected) ? "opacity-50 hover:opacity-100" : ""} ${(isSupportedColor) ? "" : "opacity-25"}`}
                                 style={{ backgroundColor: c.background, color: c.color }}>
                                 <input type="radio"
                                     onChange={selectHandler}
