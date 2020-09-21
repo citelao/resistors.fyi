@@ -328,7 +328,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                             const calculatedResistor = potentialResistors.normal;
                             const invertedResistor = potentialResistors.reversed;
 
-                            return <li key={i} className="grid grid-cols-3 even:bg-gray-200 p-1">
+                            return <li key={i} className="grid items-center grid-cols-3 even:bg-gray-200 p-1">
                                 {(calculatedResistor)
                                     ? <>
                                         <ResistorSvg colors={h} length={30} />
