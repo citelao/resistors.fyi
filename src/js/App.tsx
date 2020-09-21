@@ -289,7 +289,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                     </div>
                 </section>
 
-                <aside className="fixed top-0 right-0 m-2 w-1/3">
+                <aside className="fixed top-0 right-0 bottom-0 overflow-x-scroll m-2 w-1/3">
                     <h2 className="text-center">Current state</h2>
 
                     <ResistorSvg colors={this.state.colors}
@@ -389,7 +389,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                     </ol>
                 </aside>
             </div>
-            <footer className="text-center p-3">
+            <footer className="text-center p-3 w-2/3">
                 Written by <a href="https://ben.stolovitz.com/">Ben Stolovitz</a>. Licensed under the <a href="https://choosealicense.com/licenses/agpl-3.0/">GNU AGPLv3</a>. See it <a href="https://github.com/citelao/resistors.fyi">on GitHub</a>!
             </footer>
         </div>;
