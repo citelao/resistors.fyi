@@ -185,10 +185,10 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
         const matchedColor = Colors[hotkeyIndex];
 
-        this.handleColorSelect(matchedColor.label, this.state.currentIndex);
+        this.handleColorSelect(matchedColor.label, this.state.currentIndex, true /* shouldAnnounceColor */);
     }
 
-    private handleColorSelect = (color: ResistorColor | null, band: number) => {
+    private handleColorSelect = (color: ResistorColor | null, band: number, shouldAnnounceColor = false) => {
         const supportedColors = getSupportedColorsForIndex(band);
         if (color && !supportedColors.includes(color)) {
             console.warn(`Color not supported for this band (${color}, ${band})`);
@@ -200,6 +200,21 @@ export default class App extends React.Component<IAppProps, IAppState> {
         colors[band] = color;
 
         const shouldIncrementIndex = (this.state.currentIndex === band);
+
+        const potentialResistors = getPotentialResistors(colors);
+        const hasPotentialResistors = !!(potentialResistors.normal || potentialResistors.reversed);
+        if (hasPotentialResistors) {
+            const normalAnnouncement = (potentialResistors.normal)
+                ? resistanceToString(potentialResistors.normal)
+                : "";
+            const reversedAnnouncement = (potentialResistors.reversed)
+                ? `or ${resistanceToString(potentialResistors.reversed)} reversed`
+                : "";
+            const announcement = `${normalAnnouncement} ${reversedAnnouncement}`;
+            Announce.get().announce(announcement);
+        } else {
+            Announce.get().announce(color || "");
+        }
 
         this.setState({
             colors: colors,
