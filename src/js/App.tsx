@@ -205,12 +205,12 @@ export default class App extends React.Component<IAppProps, IAppState> {
         const hasPotentialResistors = !!(potentialResistors.normal || potentialResistors.reversed);
         if (hasPotentialResistors) {
             const normalAnnouncement = (potentialResistors.normal)
-                ? resistanceToString(potentialResistors.normal)
+                ? `${resistanceToString(potentialResistors.normal)}.`
                 : "";
             const reversedAnnouncement = (potentialResistors.reversed)
-                ? `or ${resistanceToString(potentialResistors.reversed)} reversed`
+                ? `Can be reversed.`
                 : "";
-            const announcement = `${normalAnnouncement} ${reversedAnnouncement}`;
+            const announcement = `${color || ""}. ${normalAnnouncement} ${reversedAnnouncement}`;
             Announce.get().announce(announcement);
         } else {
             Announce.get().announce(color || "");
