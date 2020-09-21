@@ -333,7 +333,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
                     <ul className="m-auto space-y-1">
                         <li><Button onClick={this.handleReset}><Hotkey>r</Hotkey> restart</Button></li>
-                        <li><Button onClick={this.handleSave} color="blue"><Hotkey>enter</Hotkey> store &amp; create new</Button></li>
+                        <li><Button onClick={this.handleSave} color="bg-blue-400"><Hotkey>enter</Hotkey> store &amp; create new</Button></li>
                     </ul>
 
                     <h3 className="text-center my-2">History</h3>
