@@ -261,114 +261,119 @@ export default class App extends React.Component<IAppProps, IAppState> {
         const calculatedResistor = potentialResistors.normal;
         const invertedResistor = potentialResistors.reversed;
 
-        return <>
-            <section className="w-2/3 m-2">
-                <h1>Reverse resistor calculator</h1>
+        return <div className="flex flex-col min-h-screen">
+            <div className="flex-grow">
+                <section className="w-2/3 m-2">
+                    <h1>Reverse resistor calculator</h1>
 
-                <div className="flex flex-wrap">
-                    {form}
-                </div>
-            </section>
+                    <div className="flex flex-wrap">
+                        {form}
+                    </div>
+                </section>
 
-            <aside className="fixed top-0 right-0 m-2 w-1/3">
-                <h2 className="text-center">Current state</h2>
+                <aside className="fixed top-0 right-0 m-2 w-1/3">
+                    <h2 className="text-center">Current state</h2>
 
-                <ResistorSvg colors={this.state.colors}
-                    length={150}
-                    className="m-auto"/>
+                    <ResistorSvg colors={this.state.colors}
+                        length={150}
+                        className="m-auto"/>
 
-                <ol>
-                    {this.state.colors.map((c) => {
-                        if (!c) {
-                            return <li>(unset)</li>;
-                        }
-                        const color = COLORS.find((info) => info.label === c) ||
-                            { background: "none", color: "inherit" };
-                        return <li style={{ backgroundColor: color.background, color: color.color }}>{c}</li>;
-                    })}
-                </ol>
+                    <ol>
+                        {this.state.colors.map((c) => {
+                            if (!c) {
+                                return <li>(unset)</li>;
+                            }
+                            const color = COLORS.find((info) => info.label === c) ||
+                                { background: "none", color: "inherit" };
+                            return <li style={{ backgroundColor: color.background, color: color.color }}>{c}</li>;
+                        })}
+                    </ol>
 
-                {(calculatedResistor)
-                    ? <p>
-                        {resistanceToString(calculatedResistor)}
-                    </p>
-                    : null}
+                    {(calculatedResistor)
+                        ? <p>
+                            {resistanceToString(calculatedResistor)}
+                        </p>
+                        : null}
 
-                {(invertedResistor)
-                    ? <small>or{" "}
-                        {resistanceToString(invertedResistor)}{" "}
-                        if backwards
+                    {(invertedResistor)
+                        ? <small>or{" "}
+                            {resistanceToString(invertedResistor)}{" "}
+                            if backwards
 
-                        <ResistorSvg colors={[... this.state.colors].reverse()} 
-                            length={60}
-                            className="m-auto" />
-                    </small>
-                    : null}
+                            <ResistorSvg colors={[... this.state.colors].reverse()} 
+                                length={60}
+                                className="m-auto" />
+                        </small>
+                        : null}
 
-                <ul className="m-auto">
-                    <li><Hotkey>r</Hotkey> restart</li>
-                    <li><Hotkey>enter</Hotkey> store &amp; create new</li>
-                </ul>
+                    <ul className="m-auto">
+                        <li><Hotkey>r</Hotkey> restart</li>
+                        <li><Hotkey>enter</Hotkey> store &amp; create new</li>
+                    </ul>
 
-                <h3 className="text-center my-2">History</h3>
-                {(this.state.history.length === 0)
-                    ? <p className="text-center text-gray-600">(enter a resistor to save history)</p>
-                    : null}
-                <ol className="list-decimal">
-                    {this.state.history.map((h, i) => {
-                        const potentialResistors = getPotentialResistors(h);
-                        const calculatedResistor = potentialResistors.normal;
-                        const invertedResistor = potentialResistors.reversed;
+                    <h3 className="text-center my-2">History</h3>
+                    {(this.state.history.length === 0)
+                        ? <p className="text-center text-gray-600">(enter a resistor to save history)</p>
+                        : null}
+                    <ol className="list-decimal">
+                        {this.state.history.map((h, i) => {
+                            const potentialResistors = getPotentialResistors(h);
+                            const calculatedResistor = potentialResistors.normal;
+                            const invertedResistor = potentialResistors.reversed;
 
-                        return <li key={i} className="grid grid-cols-3 even:bg-gray-200 p-1">
-                            {(calculatedResistor)
-                                ? <>
-                                    <ResistorSvg colors={h} length={30} />
+                            return <li key={i} className="grid grid-cols-3 even:bg-gray-200 p-1">
+                                {(calculatedResistor)
+                                    ? <>
+                                        <ResistorSvg colors={h} length={30} />
 
-                                    {/* Colors laid out */}
-                                    <div className="flex">
-                                        {h.map((c, j) => {
-                                            const color = COLORS.find((info) => info.label === c) ||
-                                                { background: "none", color: "inherit" };
-                                            return <div
-                                                key={j}
-                                                className="w-4 h-4"
-                                                title={c || undefined}
-                                                style={{ backgroundColor: color.background, color: color.color }}>
-                                                    {/* foo */}
-                                            </div>;
-                                        })}
-                                    </div>
-                                    <p>{resistanceToString(calculatedResistor)}</p>
-                                </>
-                                : null}
+                                        {/* Colors laid out */}
+                                        <div className="flex">
+                                            {h.map((c, j) => {
+                                                const color = COLORS.find((info) => info.label === c) ||
+                                                    { background: "none", color: "inherit" };
+                                                return <div
+                                                    key={j}
+                                                    className="w-4 h-4"
+                                                    title={c || undefined}
+                                                    style={{ backgroundColor: color.background, color: color.color }}>
+                                                        {/* foo */}
+                                                </div>;
+                                            })}
+                                        </div>
+                                        <p>{resistanceToString(calculatedResistor)}</p>
+                                    </>
+                                    : null}
 
-                            {(invertedResistor)
-                                ? <>
-                                    <ResistorSvg colors={[...h].reverse()} length={20} />
+                                {(invertedResistor)
+                                    ? <>
+                                        <ResistorSvg colors={[...h].reverse()} length={20} />
 
-                                    {/* Colors laid out */}
-                                    <div className="flex">
-                                        {[...h].reverse().map((c, j) => {
-                                            const color = COLORS.find((info) => info.label === c) ||
-                                                { background: "none", color: "inherit" };
-                                            return <div
-                                                key={j}
-                                                className="w-4 h-2"
-                                                title={c || undefined}
-                                                style={{ backgroundColor: color.background, color: color.color }}>
-                                                    {/* foo */}
-                                            </div>;
-                                        })}
-                                    </div>
+                                        {/* Colors laid out */}
+                                        <div className="flex">
+                                            {[...h].reverse().map((c, j) => {
+                                                const color = COLORS.find((info) => info.label === c) ||
+                                                    { background: "none", color: "inherit" };
+                                                return <div
+                                                    key={j}
+                                                    className="w-4 h-2"
+                                                    title={c || undefined}
+                                                    style={{ backgroundColor: color.background, color: color.color }}>
+                                                        {/* foo */}
+                                                </div>;
+                                            })}
+                                        </div>
 
-                                    <p className="text-sm">{resistanceToString(invertedResistor)}</p>
-                                </>
-                                : null}
-                        </li>;
-                    })}
-                </ol>
-            </aside>
-        </>;
+                                        <p className="text-sm">{resistanceToString(invertedResistor)}</p>
+                                    </>
+                                    : null}
+                            </li>;
+                        })}
+                    </ol>
+                </aside>
+            </div>
+            <footer className="text-center p-3">
+                Written by <a href="https://ben.stolovitz.com/">Ben Stolovitz</a>. Licensed under the <a href="https://choosealicense.com/licenses/agpl-3.0/">GNU AGPLv3</a>. See it <a href="https://github.com/citelao/resistors.fyi">on GitHub</a>!
+            </footer>
+        </div>;
     }
 }
