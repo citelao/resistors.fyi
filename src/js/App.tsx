@@ -1,4 +1,5 @@
 import React, { KeyboardEvent } from "react";
+import Announcer, { Announce } from "./Announcer";
 import Button from "./Button";
 import Hotkey from "./Hotkey";
 import { calculate, IResistance, ResistorColor, supportedColors } from "./resistor";
@@ -146,6 +147,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 currentIndex: 0,
                 history: [... this.state.history, this.state.colors]
             });
+            Announce.get().announce("Saved resistor.");
         } else {
             console.warn(`Can't save resistor, invalid: [${this.state.colors.join(", ")}]`);
         }
@@ -157,6 +159,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
             colors: [],
             currentIndex: 0,
         });
+        Announce.get().announce("Reset.");
     }
 
     private handleKeyDown = (e: globalThis.KeyboardEvent): void => {
@@ -381,6 +384,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
             <footer className="text-center p-3 w-2/3">
                 Written by <a href="https://ben.stolovitz.com/">Ben Stolovitz</a>. Licensed under the <a href="https://choosealicense.com/licenses/agpl-3.0/">GNU AGPLv3</a>. See it <a href="https://github.com/citelao/resistors.fyi">on GitHub</a>!
             </footer>
+            <Announcer />
         </div>;
     }
 }
