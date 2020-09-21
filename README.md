@@ -16,6 +16,7 @@ the `dist/` folder.
 ## TODO
 
 * [x] Add license
-* [ ] Accessibility - screen readers
+* [x] Accessibility - screen reader announcements
+* [ ] Accessibility - remaining screen reader experience (landmarks? instructions?)
 * [ ] Accessibility - vague colors
 * [x] Deploy (gh-pages on npm?)
