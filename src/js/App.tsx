@@ -264,7 +264,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
         return <div className="flex flex-col min-h-screen">
             <div className="flex-grow">
                 <section className="w-2/3 m-2">
-                    <h1>Reverse resistor calculator</h1>
+                    <h1>resistors.fyi</h1>
 
                     <div className="flex flex-wrap">
                         {form}
