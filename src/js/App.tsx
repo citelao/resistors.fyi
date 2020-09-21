@@ -59,12 +59,30 @@ function isFullColors(cArray: Array<ResistorColor | null>): cArray is Array<Resi
     return !hasNull;
 }
 
+/// Trim any beginning or ending nulls.
+function trimArray<T>(array: Array<T | null>): Array<T | null> {
+    let startIndex = 0;
+    while (array[startIndex] === null) {
+        startIndex++;
+    }
+
+    let endIndex = array.length - 1;
+    while (array[endIndex] === null) {
+        endIndex--;
+    }
+
+    return array.slice(startIndex, endIndex + 1);
+}
+
 interface IPotentialResistors {
     normal: IResistance | null;
     reversed: IResistance | null;
 }
 function getPotentialResistors(colors: Array<ResistorColor | null>): IPotentialResistors {
-    const isReadyToCalculate = (colors.length >= 3 && isFullColors(colors));
+    // Trim the array, since users may have deselected stuff.
+    const trimmedColors = trimArray(colors);
+
+    const isReadyToCalculate = (trimmedColors.length >= 3 && isFullColors(trimmedColors));
     if (!isReadyToCalculate) {
         return {
             normal: null,
@@ -74,14 +92,14 @@ function getPotentialResistors(colors: Array<ResistorColor | null>): IPotentialR
 
     let potentialNormal: IResistance | null = null;
     try {
-        potentialNormal = calculate(colors as ResistorColor[]);
+        potentialNormal = calculate(trimmedColors as ResistorColor[]);
     } catch(e) {
         // Ignore errors, since not all resistors are valid.
     }
 
     let potentialReversed: IResistance | null = null;
     try {
-        potentialReversed = calculate([... colors].reverse() as ResistorColor[]);
+        potentialReversed = calculate([... trimmedColors].reverse() as ResistorColor[]);
     } catch(e) {
         // Ignore errors, since not all resistors are valid.
     }
