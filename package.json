@@ -4,7 +4,9 @@
   "main": "dist/index.html",
   "license": "GNU AGPLv3",
   "scripts": {
-    "watch": "parcel src/index.html"
+    "watch": "parcel src/index.html",
+    "build": "npm run clean && NODE_ENV=production parcel build src/index.html --out-dir prod/",
+    "clean": "rm -rf dist/ && rm -rf prod/"
   },
   "devDependencies": {
     "@types/react": "^16.9.48",

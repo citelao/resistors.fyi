@@ -10,8 +10,12 @@ npm run watch
 
 ### Deployment
 
+```bash
+npm run build
+```
+
 You can configure GitHub pages to host a subfolder, so just configure it to host
-the `dist/` folder.
+the `prod/` folder.
 
 ## TODO
 

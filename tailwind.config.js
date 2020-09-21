@@ -1,5 +1,9 @@
 module.exports = {
-  purge: [],
+  purge: [
+    './src/**/*.html',
+    './src/**/*.tsx',
+    './src/**/*.ts',
+  ],
   theme: {
     extend: {},
   },
@@ -8,4 +12,7 @@ module.exports = {
     translate: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
   },
   plugins: [],
+  future: {
+    removeDeprecatedGapUtilities: true
+  }
 }
