@@ -5,12 +5,14 @@
   "license": "GNU AGPLv3",
   "scripts": {
     "watch": "parcel src/index.html",
-    "build": "npm run clean && NODE_ENV=production parcel build src/index.html --out-dir prod/",
-    "clean": "rm -rf dist/ && rm -rf prod/"
+    "build": "npm run clean && NODE_ENV=production parcel build src/index.html",
+    "clean": "rm -rf dist/",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@types/react": "^16.9.48",
     "@types/react-dom": "^16.9.8",
+    "gh-pages": "^3.1.0",
     "parcel-bundler": "^1.12.4",
     "sass": "^1.26.10",
     "typescript": "^4.0.2"
