@@ -1,4 +1,5 @@
 import React, { KeyboardEvent } from "react";
+import Button from "./Button";
 import Hotkey from "./Hotkey";
 import { calculate, IResistance, ResistorColor, supportedColors } from "./resistor";
 import ResistorSvg from "./ResistorSvg";
@@ -133,31 +134,39 @@ export default class App extends React.Component<IAppProps, IAppState> {
         document.removeEventListener("keydown", this.handleKeyDown, false);
     }
 
-    private handleKeyDown = (e: globalThis.KeyboardEvent): void => {
-        // console.log(e.key);
-        
-        if (e.key === "Enter") {
-            // Handle the "new" key command
-            // Check if we have any valid resistors:
-            const potentialResistors = getPotentialResistors(this.state.colors);
-            const hasPotentialResistors = !!(potentialResistors.normal || potentialResistors.reversed);
-            if (hasPotentialResistors) {
-                console.log(`Saving [${this.state.colors.join(", ")}]`);
-                this.setState({
-                    colors: [],
-                    currentIndex: 0,
-                    history: [... this.state.history, this.state.colors]
-                });
-            } else {
-                console.warn(`Can't save resistor, invalid: [${this.state.colors.join(", ")}]`);
-            }
-            return;
-        } else if (e.key === "r") {
-            console.log(`Clearing [${this.state.colors.join(", ")}]`);
+    private handleSave = (): void => {
+        // Handle the "new" key command
+        // Check if we have any valid resistors:
+        const potentialResistors = getPotentialResistors(this.state.colors);
+        const hasPotentialResistors = !!(potentialResistors.normal || potentialResistors.reversed);
+        if (hasPotentialResistors) {
+            console.log(`Saving [${this.state.colors.join(", ")}]`);
             this.setState({
                 colors: [],
                 currentIndex: 0,
+                history: [... this.state.history, this.state.colors]
             });
+        } else {
+            console.warn(`Can't save resistor, invalid: [${this.state.colors.join(", ")}]`);
+        }
+    }
+
+    private handleReset = (): void => {
+        console.log(`Clearing [${this.state.colors.join(", ")}]`);
+        this.setState({
+            colors: [],
+            currentIndex: 0,
+        });
+    }
+
+    private handleKeyDown = (e: globalThis.KeyboardEvent): void => {
+        // console.log(e.key);
+
+        if (e.key === "Enter") {
+            this.handleSave();
+            return;
+        } else if (e.key === "r") {
+            this.handleReset();
             return;
         }
 
@@ -304,9 +313,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
                         </small>
                         : null}
 
-                    <ul className="m-auto">
-                        <li><Hotkey>r</Hotkey> restart</li>
-                        <li><Hotkey>enter</Hotkey> store &amp; create new</li>
+                    <ul className="m-auto space-y-1">
+                        <li><Button onClick={this.handleReset}><Hotkey>r</Hotkey> restart</Button></li>
+                        <li><Button onClick={this.handleSave}><Hotkey>enter</Hotkey> store &amp; create new</Button></li>
                     </ul>
 
                     <h3 className="text-center my-2">History</h3>
