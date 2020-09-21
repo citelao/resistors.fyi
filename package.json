@@ -2,7 +2,7 @@
   "name": "resistors",
   "version": "1.0.0",
   "main": "dist/index.html",
-  "license": "GNU AGPLv3",
+  "license": "AGPL-3.0-only",
   "scripts": {
     "watch": "parcel src/index.html",
     "build": "npm run clean && NODE_ENV=production parcel build src/index.html",
