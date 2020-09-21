@@ -4,7 +4,7 @@ Simple resistor calculator.
 
 ## TODO
 
-* [ ] Add license
+* [x] Add license
 * [ ] Accessibility - screen readers
 * [ ] Accessibility - vague colors
 * [ ] Deploy (gh-pages on npm?)
